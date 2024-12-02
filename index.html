@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hokie Parking Test Plan</title>
+    <style>
+        :root {
+            --vt-maroon: #861F41;
+            --vt-orange: #E87722;
+            --navbar-height: 52px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: var(--vt-maroon);
+            width: 100%;
+            height: var(--navbar-height);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-container {
+            display: flex;
+            min-width: max-content;
+            padding: 0 20px;
+        }
+
+        .navbar a {
+            color: white;
+            padding: 16px 24px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            height: var(--navbar-height);
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .main-content {
+            margin-top: var(--navbar-height);
+            width: 100%;
+        }
+
+        .hero {
+            background-color: var(--vt-maroon);
+            padding: 40px;
+            color: white;
+            width: 100%;
+        }
+
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .hero p {
+            text-align: center;
+        }
+
+        .content {
+            padding: 40px;
+            flex-grow: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: var(--vt-maroon);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--vt-orange);
+            padding-bottom: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        th {
+            background-color: var(--vt-maroon);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        section {
+            display: none;
+            width: 100%;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        .orange-line {
+            border-top: 2px solid var(--vt-orange);
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        /* Scrollbar styling */
+        .navbar::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .navbar::-webkit-scrollbar-track {
+            background: var(--vt-maroon);
+        }
+
+        .navbar::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .hero {
+                padding: 20px;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#test-scope" class="nav-link">Test Scope</a>
+            <a href="#test-plan" class="nav-link">Test Plan</a>
+            <a href="#phase-one" class="nav-link">Phase One</a>
+            <a href="#phase-two" class="nav-link">Phase Two</a>
+            <a href="#phase-three" class="nav-link">Phase Three</a>
+            <a href="#validation" class="nav-link">Validation Testing</a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="hero">
+            <h1>HOKIE PARKING TEST PLAN</h1>
+            <div class="orange-line"></div>
+            <p>Independent Verification and Validation Plan</p>
+        </div>
+
+        <div class="content">
+            <section id="test-scope" class="active">
+                <h2 class="section-title">Test Scope</h2>
+                <p>TODO</p>
+            </section>
+
+            <section id="test-plan">
+                <h2 class="section-title">Test Plan</h2>
+                <p>TODO</p>
+            </section>
+
+            <section id="phase-one">
+                <h2 class="section-title">Phase One: Backend Integration Testing</h2>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <tr>
+                        <td>[ID]</td>
+                        <td>[Objective]</td>
+                        <td>[Description]</td>
+                        <td>[Expected Result]</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="phase-two">
+                <h2 class="section-title">Phase Two: Load Balancer Integration Testing</h2>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <tr>
+                        <td>[ID]</td>
+                        <td>[Objective]</td>
+                        <td>[Description]</td>
+                        <td>[Expected Result]</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="phase-three">
+                <h2 class="section-title">Phase Three: Frontend Integration Testing</h2>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <tr>
+                        <td>[ID]</td>
+                        <td>[Objective]</td>
+                        <td>[Description]</td>
+                        <td>[Expected Result]</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section id="validation">
+                <h2 class="section-title">Validation Testing</h2>
+                <h3>Requirements Traceability Matrix</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                        <th>REQUIREMENT SATISFIED</th>
+                    </tr>
+                    <tr>
+                        <td>[ID]</td>
+                        <td>[Description]</td>
+                        <td>[Expected Result]</td>
+                        <td>[Requirement]</td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetId = link.getAttribute('href').substring(1);
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
