@@ -187,16 +187,51 @@
         <div class="content">
             <section id="test-scope" class="active">
                 <h2 class="section-title">Test Scope</h2>
-                <p>TODO</p>
+                <p>The Hokie Parking System is a parking management solution to help people park around the Virginia Tech campus. This
+                document will outline the testing strategies for the system’s primary functionality. The testing scope will go over the
+                real-time parking space tracking, reservation processing, and administration analytics, we are also assuming that unit
+                testing has been completed. This includes testing parking space availability updates, reservation management, payment
+                processing, and user rating systems. Additionally, this document will investigate performance testing to make sure the
+                system meets different requirements like updating within 5-seconds and handling high traffic loads correctly. Testing
+                will also take place not only with the mobile app interface for users, but also with the web dashboard for admins.
+                Overall, this document investigates different testing approaches for validating system behavior and looking into error
+                handling/data accuracy in all modules.</p>
             </section>
 
             <section id="test-plan">
                 <h2 class="section-title">Test Plan</h2>
-                <p>TODO</p>
+                <p>For this project, we will be doing the integration testing in 3 separate phases using a Bottom-Up approach. In phase one
+                we will focus on integrating the main backend services and databases. This includes the Real-Time Data Modules with the
+                sensor data processing, the Reservation and Payment Module, the Analytics and Administration Module, and database
+                systems for all data collected in the application. The second phase will look at the performance requirements and system
+                optimizations. This includes testing the caching system, verifying the 5-second update requirement for real-time
+                information, and making sure the system can handle high loads of traffic. Phase two will use load testing tools and
+                performance monitoring to make sure the system meets the non-functional requirements. Finally, phase three will
+                investigate testing the front-end integration. This includes testing things like the Map display, registration/payment
+                page, recommendation page, and the analytics report dashboard. Bottom-up integration was chosen because the system’s
+                main functionality relies on the backend services working. Once everything in the backend is testing the front-end can
+                be safely tested after.</p>
             </section>
 
             <section id="phase-one">
                 <h2 class="section-title">Phase One: Backend Integration Testing</h2>
+                <p>For the first phase, we will be testing three different backend components of the VT Parking System: the Real-Time Data
+                Module, the Reservation and Payment Module, and the Analytics and Administration Module. The module overview provided
+                from the VT Parking system original document only shows one clearly defined API, Real-Time API, however we can make the
+                assumption that the other modules must also communicate via API. This assumption can be made because the overall design
+                of the system is a client-server architecture where the mobile app users are the client and the modules are the server.
+                Therefore, for the clients to communicate with other modules in the server, it also must be through an API. Through this
+                reasoning, the APIs that need to be tested for the Backend Intergration Testing are the Parking Spaces API, the
+                Reservation/Payment API, and Analytics/Administration API. We’d also like to introduce the need to test an additional
+                module that isn’t explicitly stated in the original document but is needed to complete FR-5 and FR-6: the
+                Personalization API. This API needs to handle requests by leaving comments and ratings on parking spaces and also create
+                personalized recommendations for users. These API endpoints must be tested to verify what is expected from the server
+                based on different HTTP requests. Some testing tools that exist for automated API testing include Postman, JMeter, and
+                Cypress; automated testing for API is important to save time and incorporate in build pipelines for continuous
+                integration. Swagger is also a good tool to use to properly document API servers and provide an easy-to-use interface
+                for calling these endpoints.</p>
+
+                <h2 class="section-title">Phase 1.1: Parking Spaces API</h2>
                 <h3>Test Cases</h3>
                 <table>
                     <tr>
@@ -206,12 +241,137 @@
                         <th>EXPECTED RESULT</th>
                     </tr>
                     <tr>
-                        <td>[ID]</td>
-                        <td>[Objective]</td>
-                        <td>[Description]</td>
-                        <td>[Expected Result]</td>
+                        <td>1.1.1</td>
+                        <td>Check Parking API is online</td>
+                        <td>Send GET Request on /api/parking</td>
+                        <td>Response 200 (OK) and returns status of Parking API (online)</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.2</td>
+                        <td>Check if Parking API returns parking locations</td>
+                        <td>Send GET Request on /api/parking/locations</td>
+                        <td>Response 200 (OK) and returns list of all parking locations</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.3</td>
+                        <td>Check if Parking API can filter on on-campus parking locations</td>
+                        <td>Send GET Request on /api/parking/locations?campus=true</td>
+                        <td>Response 200 (OK) and returns list of all on-campus parking locations</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.4</td>
+                        <td>Check if Parking API can filter on off-campus parking locations</td>
+                        <td>Send GET Request on /api/parking/locations?campus=false</td>
+                        <td>Response 200 (OK) and returns list of all off-campus parking locations</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.5</td>
+                        <td>Check if Parking API can return all parking spaces</td>
+                        <td>Send GET Request on /api/parking/spaces</td>
+                        <td>Response 200 (OK) and returns list of parking spaces, including its id, location, sensor status, availability
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1.1.6</td>
+                        <td>Check if Parking API can filter on on-campus spaces</td>
+                        <td>Send GET Request on /api/parking/spaces?campus=true</td>
+                        <td>Response 200 (OK) and returns list of parking spaces on-campus</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.7</td>
+                        <td>Check if Parking API can filter on off-campus spaces</td>
+                        <td>Send GET Request on /api/parking/spaces?campus=false</td>
+                        <td>Response 200 (OK) and returns list of parking spaces off-campus</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.8</td>
+                        <td>Check if Parking API can filter on location</td>
+                        <td>Send GET Request on /api/parking/spaces?location=example_location</td>
+                        <td>Response 200 (OK) and returns list of parking spaces for each location</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.9</td>
+                        <td>Check if Parking API can filter spaces on price</td>
+                        <td>Send GET Request on /api/parking/spaces?price_range=<enumeration_value>
+                        </td>
+                        <td>Response 200 (OK) and returns list of parking spaces that fit the price range</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.11</td>
+                        <td>Check if Parking API can filter spaces on building</td>
+                        <td>Send GET Request on /api/parking/spaces/<building>
+                        </td>
+                        <td>Response 200 (OK) and returns list of parking spaces and the distance to the building in closest to farthest
+                            order</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.12</td>
+                        <td>Check if Parking API can filter spaces on distance to a building</td>
+                        <td>Send GET Request on /api/parking/spaces/<building>?distance_range=<enumeration_value>
+                        </td>
+                        <td>Response 200 (OK) and returns list of parking spaces that fit the distance range</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.13</td>
+                        <td>Check if Parking API can filter spaces on spot size</td>
+                        <td>Send GET Request on /api/parking/spaces?spot_size=<enumeration_value>
+                        </td>
+                        <td>Response 200 (OK) and returns list of parking spaces that spot size</td>
+                    </tr>
+                    <tr>
+                        <td>1.1.14</td>
+                        <td>Check if Parking API can get specific details about a parking space</td>
+                        <td>Send GET Request on /api/parking/spaces/{id}</td>
+                        <td>Response 401 (Unauthorized) because users are credentials are not provided (nor implemented yet)</td>
                     </tr>
                 </table>
+                <h2 class="section-title">Phase 1.2: Analytics/Administration API</h2>
+                <p>The Analytics/Administration API backend module provides time-series statistics about the VT Parking System. The
+                original document indicates this module requires a privileged user to access the data, which will need to be tested.
+                Because this module introduces the need of role-based authentication control (RBAC), features of creating different
+                privileged level users will also need to be tested. Now that users have implemented this phase, we also want to test to
+                ensure the privileged data can be reached from the Parking API. The phase will be directly testing the following
+                requirements from the original document: FR-7.</p>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                <table></table>
+                <h2 class="section-title">Phase 1.3: Reservation/Payment API</h2>
+                <p>The Reservation/Payment API backend module allows for users to reserve parking spaces. To complete a registration
+                process, the user may need to provide payment information. Therefore, these API endpoints need to include allowing users
+                to add, update, and delete payment methods, and use these payment methods while reserving spaces. The endpoints should
+                allow also reservations to change or be canceled if needed and are tied to updating the parking database. For this test
+                suite, a database with mock users is needed to stimulate these API calls. This test follows the Administration module
+                testing so we can assign different privileged levels to the users for testing. The phase will be directly testing the
+                following requirements from the original document: FR-3.</p>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <table></table>
+                    <h2 class="section-title">Phase 1.4: Personalization API</h2>
+                    <p>The Personalization API backend module provides capability for users to attach comments and reviews to parking spaces.
+                    The system testers decided this module was needed because none of the modules were currently handling this feature. The
+                    testing of this module will help ensure that recommendations can be added to the app in the future. The phase will be
+                    directly testing the following requirements from the original document: FR-5 and FR-6.</p>
+                    <h3>Test Cases</h3>
+                    <table>
+                        <tr>
+                            <th>TEST CASE ID</th>
+                            <th>TEST CASE OBJECTIVE</th>
+                            <th>TEST CASE DESCRIPTION</th>
+                            <th>EXPECTED RESULT</th>
+                        </tr>
+                        <table></table>
             </section>
 
             <section id="phase-two">
@@ -235,6 +395,18 @@
 
             <section id="phase-three">
                 <h2 class="section-title">Phase Three: Frontend Integration Testing</h2>
+                <p>For the final phase, we will look at testing the frontend integration of the VT Parking System. Because we'll be testing
+                how users interact with the system, we need to make sure the interface works correctly with the backend services we
+                tested in phase one. The frontend testing will
+                be split into three main parts: testing the real-time map display, testing the registration and payment system, and
+                testing the ratings and recommendations page.</p>
+            
+                <h2 class="section-title">Phase 3.1: Real-Time Map Display</h2>
+                <p>The map display is one of the main features users will interact with to find parking spots. We need to test if the map
+                loads properly, shows real-time updates about parking spots, and lets users filter and select spots easily. To test this
+                properly, we'll need to create mock location data and simulate WebSocket connections that would normally come from the
+                actual parking sensors. The real-time aspect is especially important here since users need current information about
+                parking availability.</p>
                 <h3>Test Cases</h3>
                 <table>
                     <tr>
@@ -244,16 +416,159 @@
                         <th>EXPECTED RESULT</th>
                     </tr>
                     <tr>
-                        <td>[ID]</td>
-                        <td>[Objective]</td>
-                        <td>[Description]</td>
-                        <td>[Expected Result]</td>
+                        <td>3.1.1</td>
+                        <td>Verify map initialization</td>
+                        <td>Launch application, wait for map to load, check all map controls</td>
+                        <td>Map loads within 2 seconds, all parking lots can be seen, zoom in/out works, map centered on VT campus
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3.1.2</td>
+                        <td>Test real-time updates</td>
+                        <td>Monitor map display, observe parking spot status changes, check update speed</td>
+                        <td>Spot status updates within 5 seconds on application, spot counts updates correctly, updates are smooth
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3.1.3</td>
+                        <td>Verify filtering</td>
+                        <td>Apply different filters like location/price, change filters, clear filters</td>
+                        <td>Map updates according to inputted filters, works with multiple filters</td>
+                    </tr>
+                    <tr>
+                        <td>3.1.4</td>
+                        <td>Test spot selection</td>
+                        <td>Click on available spot, view spot details, test navigation to spot</td>
+                        <td>Spot details show up correctly, information is correct, navigation works properly</td>
+                    </tr>
+                </table>
+            
+                <h2 class="section-title">Phase 3.2: Registration/Payment Page</h2>
+                <p>The registration and payment system handles user accounts and parking spot reservations. Testing will focus on
+                    form validation, payment processing, and reservation confirmation. Mock payment processing services will be used
+                    to simulate transactions.</p>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <tr>
+                        <td>3.2.1</td>
+                        <td>Test user registration</td>
+                        <td>Fill out user registration, test password requirements, check registration verification</td>
+                        <td>Form checks all fields correctly, Password requirements enforced, Verification sent to email, account
+                            gets created properly</td>
+                    </tr>
+                    <tr>
+                        <td>3.2.2</td>
+                        <td>Verify adding payment to account</td>
+                        <td>Go to payment settings, add new card, edit card, remove payment method</td>
+                        <td>Card info saved securely, card validation works, edits are updated immediately, removal confirmation
+                            required and is removed correctly</td>
+                    </tr>
+                    <tr>
+                        <td>3.2.3</td>
+                        <td>Test reservation</td>
+                        <td>Select parking spot, choose time to reserve, process payment, receive confirmation</td>
+                        <td>Price calculated correctly, payment processed, confirmation details are shown, receipt generated</td>
+                    </tr>
+                    <tr>
+                        <td>3.2.4</td>
+                        <td>Verify form</td>
+                        <td>Submit incomplete/incorrect forms, test invalid inputs, check errors, test form recovery</td>
+                        <td>Error messages are shown clearly, required fields are marked, invalid input is prevented, form keeps all
+                            the valid data that has been entered</td>
+                    </tr>
+                </table>
+            
+                <h2 class="section-title">Phase 3.3: Ratings/Comments/Recommendation Page</h2>
+                <p>The ratings and recommendations system allows users to share experiences and receive personalized parking
+                    suggestions. Testing will focus on user interaction with ratings, comments, and the
+                    response to user feedback.</p>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <tr>
+                        <td>3.3.1</td>
+                        <td>Test rating</td>
+                        <td>Select parking location, submit rating, add comment, submit review</td>
+                        <td>Rating saves, comment posts immediately, user feedback confirmed, rating updates overall score of
+                            parking location</td>
+                    </tr>
+                    <tr>
+                        <td>3.3.2</td>
+                        <td>Verify recommendation display</td>
+                        <td>View recommended spots, refresh recommendations, sort recommendations</td>
+                        <td>Recommendations load quickly, updates based on new ratings, can sort recommendations based on the filter
+                            (high/low or low/high)</td>
+                    </tr>
+                    <tr>
+                        <td>3.3.3</td>
+                        <td>Test comment</td>
+                        <td>Submit comment, edit comment, delete comment, check comment moderation (report)</td>
+                        <td>Report function works, submitting a comment works and is updated on the page, comments can be edited,
+                            and they are updated when edited, delete removes comment</td>
+                    </tr>
+                </table>
+                <h2 class="section-title">Phase 3.4: Analytics Report</h2>
+                <p>The Analytics Report dashboard is a important for administrators to monitor parking trends and make
+                decisions based on the data analyzed. We need to test both the visualization of data and the report generation features. To test this
+                component correctly, we need mock data that simulates real parking patterns over different time periods. We also
+                need to verify that all graphs and charts render correctly and that data can be exported in various formats.</p>
+                <h3>Test Cases</h3>
+                <table>
+                    <tr>
+                        <th>TEST CASE ID</th>
+                        <th>TEST CASE OBJECTIVE</th>
+                        <th>TEST CASE DESCRIPTION</th>
+                        <th>EXPECTED RESULT</th>
+                    </tr>
+                    <tr>
+                        <td>3.4.1</td>
+                        <td>Test dashboard loading</td>
+                        <td>Login as admin, navigate to analytics dashboard, verify all components load</td>
+                        <td>Dashboard loads within 3 seconds, all charts and graphs appear, no missing data</td>
+                    </tr>
+                    <tr>
+                        <td>3.4.2</td>
+                        <td>Verify time period filtering</td>
+                        <td>Select different time periods, apply filters, check data updates</td>
+                        <td>Data updates to reflect picked time period, graphs render each selection, correct date ranges shown</td>
+                    </tr>
+                    <tr>
+                        <td>3.4.3</td>
+                        <td>Test occupancy rate charts</td>
+                        <td>View occupancy rates for different lots, check peak hours, verify calculations</td>
+                        <td>Charts show correct occupancy percentages, peak hours marked, calculations match raw data</td>
+                    </tr>
+                    <tr>
+                        <td>3.4.4</td>
+                        <td>Check revenue reports</td>
+                        <td>Generate revenue reports for different periods, verify calculations, test sorting options</td>
+                        <td>Revenue totals are accurate, sorting works for all columns, subtotals match individual entries</td>
+                    </tr>
+                    <tr>
+                        <td>3.4.5</td>
+                        <td>Test report export</td>
+                        <td>Export reports in different formats like PDF/Excel, check downloaded files</td>
+                        <td>Files download correctly, all data present, formatting maintained</td>
                     </tr>
                 </table>
             </section>
 
             <section id="validation">
                 <h2 class="section-title">Validation Testing</h2>
+                <p>Validation testing is needed for making sure that every feature in the application works as intended and satisfies
+                    the requirements. This phase tests all the use cases from the end user's perspective,
+                    verifying that the system meets both functional and non-functional requirements.</p>
                 <h3>Requirements Traceability Matrix</h3>
                 <table>
                     <tr>
@@ -263,10 +578,64 @@
                         <th>REQUIREMENT SATISFIED</th>
                     </tr>
                     <tr>
-                        <td>[ID]</td>
-                        <td>[Description]</td>
-                        <td>[Expected Result]</td>
-                        <td>[Requirement]</td>
+                        <td>V1</td>
+                        <td>User opens app and sees parking availability map for campus lots</td>
+                        <td>Real-time parking spot availability is displayed on the map with accurate counts. Spot status updates
+                            within 5 seconds of changes</td>
+                        <td>FR-1, NFR-1</td>
+                    </tr>
+                    <tr>
+                        <td>V2</td>
+                        <td>Users attempt to find a parking spot during peak hours when the campus lots are all full</td>
+                        <td>The system automatically displays off-campus parking options and provides navigation to those off-campus
+                            lots</td>
+                        <td>FR-2</td>
+                    </tr>
+                    <tr>
+                        <td>V3</td>
+                        <td>User makes a reservation for a parking spot in advance</td>
+                        <td>User can select future date and time, can pick a specific lot/spot, system sends confirmation message,
+                            and spot is reserved for the selected time window</td>
+                        <td>FR-3</td>
+                    </tr>
+                    <tr>
+                        <td>V4</td>
+                        <td>User applies filters when searching for parking</td>
+                        <td>Filters are available for: location, price, distance to building, spot size. Results searched for are
+                            updated accurately for each filter chosen and results will appear within 2 seconds</td>
+                        <td>FR-4, NFR-3</td>
+                    </tr>
+                    <tr>
+                        <td>V5</td>
+                        <td>User submits rating and comment for a parking location</td>
+                        <td>The rating system works correctly, comments display properly, any user can view feedback, and users can
+                            edit/delete their comments</td>
+                        <td>FR-5</td>
+                    </tr>
+                    <tr>
+                        <td>V6</td>
+                        <td>User views personalized parking recommendations</td>
+                        <td>System displays recommendations based on past ratings, parking history</td>
+                        <td>FR-6</td>
+                    </tr>
+                    <tr>
+                        <td>V7</td>
+                        <td>Admin views weekly parking report</td>
+                        <td>Trends and occupancy rates display, report includes peak usage times and patterns, report can be
+                            exported</td>
+                        <td>FR-7, NFR-5</td>
+                    </tr>
+                    <tr>
+                        <td>V8</td>
+                        <td>App launches in proper time</td>
+                        <td>App loads and is functional within 2 seconds</td>
+                        <td>NFR-2</td>
+                    </tr>
+                    <tr>
+                        <td>V9</td>
+                        <td>Admin looks at system uptime over one week</td>
+                        <td>System maintains 99.9% uptime, downtime is logged, system recovers automatically from interruptions</td>
+                        <td>NFR-4</td>
                     </tr>
                 </table>
             </section>
