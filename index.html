@@ -324,6 +324,12 @@
                         <td>Send GET Request on /api/parking/spaces/{id}</td>
                         <td>Response 401 (Unauthorized) because users are credentials are not provided (nor implemented yet)</td>
                     </tr>
+                    <tr>
+                        <td>1.1.15</td>
+                        <td>Check Parking API declines if unauthenticated </td>
+                        <td>Send GET Request on /api/parking </td>
+                        <td>Response 401 (Unauthenticated) and message to sign in </td>
+                    </tr>
                 </table>
                 <h2 class="section-title">Phase 1.2: Analytics/Administration API</h2>
                 <p>The Analytics/Administration API backend module provides time-series statistics about the VT Parking System. The
@@ -340,29 +346,82 @@
                         <th>TEST CASE DESCRIPTION</th>
                         <th>EXPECTED RESULT</th>
                     </tr>
-                <table></table>
-                <h2 class="section-title">Phase 1.3: Reservation/Payment API</h2>
-                <p>The Reservation/Payment API backend module allows for users to reserve parking spaces. To complete a registration
-                process, the user may need to provide payment information. Therefore, these API endpoints need to include allowing users
-                to add, update, and delete payment methods, and use these payment methods while reserving spaces. The endpoints should
-                allow also reservations to change or be canceled if needed and are tied to updating the parking database. For this test
-                suite, a database with mock users is needed to stimulate these API calls. This test follows the Administration module
-                testing so we can assign different privileged levels to the users for testing. The phase will be directly testing the
-                following requirements from the original document: FR-3.</p>
-                <h3>Test Cases</h3>
-                <table>
                     <tr>
-                        <th>TEST CASE ID</th>
-                        <th>TEST CASE OBJECTIVE</th>
-                        <th>TEST CASE DESCRIPTION</th>
-                        <th>EXPECTED RESULT</th>
+                        <td>1.2.1</td>
+                        <td>Check if Reservation API is online  </td>
+                        <td>Send GET Request on /api/reservation  </td>
+                        <td>Response 200 (OK) and returns status of Reservation API (online)  </td>
                     </tr>
-                    <table></table>
-                    <h2 class="section-title">Phase 1.4: Personalization API</h2>
-                    <p>The Personalization API backend module provides capability for users to attach comments and reviews to parking spaces.
-                    The system testers decided this module was needed because none of the modules were currently handling this feature. The
-                    testing of this module will help ensure that recommendations can be added to the app in the future. The phase will be
-                    directly testing the following requirements from the original document: FR-5 and FR-6.</p>
+                    <tr>
+                        <td>1.2.2</td>
+                        <td>Check if Reservation API can reserve a spot  </td>
+                        <td>Send POST Request on /api/ reservation /{parking_id}?user={pid} </td>
+                        <td>Response 201 (Created) and returns the spot reservation information  </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.3</td>
+                        <td>Check if Reservation API returns an error if the spot is not available  </td>
+                        <td>Send POST Request on /api/ reservation /{parking_id}?user={pid} </td>
+                        <td>Response 500 (Server Error) and returns the spot was not available  </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.4</td>
+                        <td>Check if Payment API can accept payment  </td>
+                        <td>Send GET Request on /api/payment  </td>
+                        <td>Response 200 (OK) and returns status of Payment API  </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.5</td>
+                        <td>Check if Payment API can add a payment </td>
+                        <td>Send POST Request on /api/payment/add?user={pid} with payment data payload </td>
+                        <td>Response 201(Created) and returns payment information and id   </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.6</td>
+                        <td>Check if Payment API can use a payment  </td>
+                        <td>Send POST Request on /api/payment/{payment_id}/{transaction_id}?user={pid}  </td>
+                        <td>Response 200 (OK) and returns a success   </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.7</td>
+                        <td>Check if Payment API declines adding a payment if invalid  </td>
+                        <td>Send POST Request on /api/payment/add?user={pid} with invalid payment data payload </td>
+                        <td>Response 400 (Bad Request) and returns a failure  </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.8</td>
+                        <td>Check if Payment API can delete payment method  </td>
+                        <td>Send DELETE Request on /api/payment/{payment_id}?user={pid}  </td>
+                        <td>Response 200 (OK) and returns success  </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.9</td>
+                        <td>Check if Payment API can update payment method  </td>
+                        <td>Send PUT Request on /api/payment/{payment_id}?user={pid}  </td>
+                        <td>Response 200 (Ok) and returns success </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.10</td>
+                        <td>Check Reservation API declines if unauthenticated   </td>
+                        <td>Send GET Request on /api/reservation </td>
+                        <td>Response 401 (Unauthenticated) and returns message to sign in   </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.11</td>
+                        <td>Check Payment API declines if unauthenticated  </td>
+                        <td>Send GET Request on /api/payment </td>
+                        <td>Response 401 (Unauthenticated) and returns message to sign in  </td>
+                    </tr>
+                    <tr>
+                        <td>1.2.12</td>
+                        <td>Check if Parking API can get specific details about a parking space  </td>
+                        <td>Send GET Request on /api/parking/spaces/{id}  </td>
+                        <td>Response 200 (OK) and returns information about the parking spot and user registered in the spot  </td>
+                    </tr>
+                <table>
+                    
+                    <h2 class="section-title">Phase 1.3: Analytics/Administration API</h2>
+                    <p>The Analytics/Administration API backend module provides time-series statistics about the VT Parking System. The original document indicates this module requires a privileged Virginia Tech user to access the data, which will need to be tested. This is like how professors have elevated access on their canvas page; whether it's valid or not would be handled by the OAuth from DUO. Because this module introduces the need of role-based authentication control (RBAC), features of testing different privileged level users will also need to be tested. We also want to test to ensure the privileged data can be reached from the Parking API since the Reservation API testing has been completed. The phase will be directly testing the following requirements from the original document: FR-7.</p>
                     <h3>Test Cases</h3>
                     <table>
                         <tr>
@@ -371,11 +430,59 @@
                             <th>TEST CASE DESCRIPTION</th>
                             <th>EXPECTED RESULT</th>
                         </tr>
-                        <table></table>
+                        <tr>
+                            <td>1.3.1</td>
+                            <td>Check if Analytics API is online with valid user</td>
+                            <td>Send GET Request on /api/analytics?user={pid}</td>
+                            <td>Response 200 (OK) and returns status of Analytics API</td>
+                        </tr>
+                        <tr>
+                            <td>1.3.2</td>
+                            <td>Check if Analytics API is online with invalid user</td>
+                            <td>Send GET Request on /api/analytics?user={pid}</td>
+                            <td>Response 403 (Forbidden) and returns nothing</td>
+                        </tr>
+                        <tr>
+                            <td>1.3.3</td>
+                            <td>Check if Analytics API returns statistics report on reservation based on week</td>
+                            <td>Send GET Request on /api/analytics/statistics?user={pid}</td>
+                            <td>Response 200 and a JSON formatted file with the weekly statistics</td>
+                        </tr>
+                    </table>
+                    <h2 class="section-title">Phase 1.4: Personalization API</h2>
+                    <p>The Personalization API backend module provides capability for users to attach comments and reviews to parking spaces. The system testers decided this module was needed because none of the modules were currently handling this feature. The testing of this module will help ensure that recommendations can be added to the app in the future. The phase will be directly testing the following requirements from the original document: FR-5 and FR-6.</p>
+                    <h3>Test Cases</h3>
+                    <table>
+                        <tr>
+                            <th>TEST CASE ID</th>
+                            <th>TEST CASE OBJECTIVE</th>
+                            <th>TEST CASE DESCRIPTION</th>
+                            <th>EXPECTED RESULT</th>
+                        </tr>
+                        <tr>
+                            <td>1.4.1</td>
+                            <td>Check if Personalization API is online</td>
+                            <td>Send GET Request on /api/personalization</td>
+                            <td>Response 200 (OK) and returns status of Personalization API</td>
+                        </tr>
+                        <tr>
+                            <td>1.4.2</td>
+                            <td>Check if Personalization API can add comments to a parking spot</td>
+                            <td>Send POST Request on /api/personalization/{parking_id}?user={pid} with comment payload data</td>
+                            <td>Response 201 (Created) and returns success</td>
+                        </tr>
+                        <tr>
+                            <td>1.4.3</td>
+                            <td>Check if Personalization API can add a recommendation marker</td>
+                            <td>Send POST Request on /api/personalization/{parking_id}/recommends?user={pid}</td>
+                            <td>Response 200 (Ok) and returns success</td>
+                        </tr>
+                    </table>
             </section>
 
             <section id="phase-two">
-                <h2 class="section-title">Phase Two: Load Balancer Integration Testing</h2>
+                <h2 class="section-title">Phase 2: Backend Performance Testing</h2>
+                <p>For the second phase, we need to test the performance aspect of the system. So, the app can be performant, there needs to be caching on the latest data retrieved from the database. This can be tested by seeing a decrease in retrieval time after the first query. What data is cached can be dependent on what's the most popular parking spaces during the day. During peak times as well, like in the times before classes, there will be a large increase in traffic on the app. The backend performance test ensures a sudden increase in traffic does not degrade the response from the API services. The phase will be directly testing the following requirements from the original document: NFR-3 and NFR-4.</p>
                 <h3>Test Cases</h3>
                 <table>
                     <tr>
@@ -385,10 +492,40 @@
                         <th>EXPECTED RESULT</th>
                     </tr>
                     <tr>
-                        <td>[ID]</td>
-                        <td>[Objective]</td>
-                        <td>[Description]</td>
-                        <td>[Expected Result]</td>
+                        <td>2.1</td>
+                        <td>Check the response time when every API is called right after each other</td>
+                        <td>Send GET request to /api/parking, /api/reservation, /api/payment, /api/analytics, /api/personalization right after each other</td>
+                        <td>Every API should response 200 (OK) and all should be within 0.5 second.</td>
+                    </tr>
+                    <tr>
+                        <td>2.2</td>
+                        <td>Check if the Parking API can handle multiple requests</td>
+                        <td>Send 500 consecutive GET request on /api/parking/spaces</td>
+                        <td>Every request should return 200 (OK) and it should be within 2 seconds</td>
+                    </tr>
+                    <tr>
+                        <td>2.3</td>
+                        <td>Check if the Parking API can handle multiple filters requests</td>
+                        <td>Send 200 consecutive filter GET requests on /api/request</td>
+                        <td>Every request should return 200 (OK) and it should be within 2 seconds</td>
+                    </tr>
+                    <tr>
+                        <td>2.4</td>
+                        <td>Check if the Reservation API can handle multiple requests</td>
+                        <td>Send 100 POST Request on /api/reservation/{parking_id}?user={pid}</td>
+                        <td>Every request should return 201 (OK) and it should be within 1 seconds</td>
+                    </tr>
+                    <tr>
+                        <td>2.5</td>
+                        <td>Check if the Payment API can handle multiple requests</td>
+                        <td>Send 100 POST Request on /api/payment/add?user={pid} with payment data payload</td>
+                        <td>Every request should return 201 (OK) and it should be within 1 seconds</td>
+                    </tr>
+                    <tr>
+                        <td>2.6</td>
+                        <td>Check if the Personalization API can handle multiple requests</td>
+                        <td>Send 50 POST Request on /api/personalization/{parking_id}?user={pid} with comment payload data</td>
+                        <td>Every request should return 201 (OK) and it should be within 1 seconds</td>
                     </tr>
                 </table>
             </section>
@@ -446,7 +583,7 @@
                 <h2 class="section-title">Phase 3.2: Registration/Payment Page</h2>
                 <p>The registration and payment system handles user accounts and parking spot reservations. Testing will focus on
                     form validation, payment processing, and reservation confirmation. Mock payment processing services will be used
-                    to simulate transactions.</p>
+                    to test transactions.</p>
                 <h3>Test Cases</h3>
                 <table>
                     <tr>
@@ -458,9 +595,8 @@
                     <tr>
                         <td>3.2.1</td>
                         <td>Test user registration</td>
-                        <td>Fill out user registration, test password requirements, check registration verification</td>
-                        <td>Form checks all fields correctly, Password requirements enforced, Verification sent to email, account
-                            gets created properly</td>
+                        <td>Login with Virginia Tech account</td>
+                        <td>Account in system if they have a Virginia Tech email. New accounts added to Virginia Tech domain are automatically added to hokie parking.  </td>
                     </tr>
                     <tr>
                         <td>3.2.2</td>
